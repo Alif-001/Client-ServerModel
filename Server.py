@@ -1,6 +1,8 @@
 import socket
 import threading
 
+import matplotlib.pyplot as plt
+
 # localhost
 host = "127.0.0.1"
 # do not take any reserved or well known ports
@@ -14,6 +16,11 @@ clients = []
 nicknames = []
 banned_words = ["bad", "idiot", "black"]
 
+brand_name = ["Apple", "Google", "Microsoft", "Windows"]
+brand_count = {}
+for i in brand_name:
+    brand_count[i] = 0
+
 # braodcasting messages from the server to all the clients
 
 
@@ -24,6 +31,12 @@ def broadcast(message):
             message = message.replace(i.encode('ascii'), b'*' * len(i))
 
     # implement the brand analytics and tracking here
+    # brand analytics
+    for brand in brand_name:
+        messageDecode = message.decode('ascii')
+        if brand in messageDecode:
+            brand_count[brand] += 1
+
     # tracking
     with open('chatTracking.txt', 'a')as f:
         f.write(f'{(message.decode("ascii"))}\n')
@@ -52,8 +65,11 @@ def handle(client):
             nicknames.remove(nickname)
             break
 
+        brand_counts()
 
 # This is the method that runs first
+
+
 def receive():
 
     # Accepting all the connections
@@ -90,6 +106,17 @@ def receive():
 
         thread = threading.Thread(target=handle, args=(client,))
         thread.start()
+
+
+def brand_counts():
+    bar_colors = ['red', 'blue', 'green', 'orange']
+    plt.bar(range(len(brand_count)), list(
+        brand_count.values()), color=bar_colors)
+    plt.xticks(range(len(brand_count)), list(brand_count.keys()))
+    plt.xlabel("Brands")
+    plt.ylabel("Mentions")
+    plt.title("Brand analytics")
+    plt.show()
 
 
 # main method
