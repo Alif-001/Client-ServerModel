@@ -28,7 +28,9 @@ def broadcast(message):
     # implement the filtering of the messages here
     for i in banned_words:
         if i in message.decode('ascii'):
-            message = message.replace(i.encode('ascii'), b'*' * len(i))
+            message_str = message.decode('ascii')
+            message_str = message_str.replace(i, '*' * len(i))
+            message = message_str.encode('ascii')
 
     # implement the brand analytics and tracking here
     # brand analytics
@@ -65,7 +67,7 @@ def handle(client):
             nicknames.remove(nickname)
             break
 
-        brand_counts()
+    brand_counts()
 
 # This is the method that runs first
 
