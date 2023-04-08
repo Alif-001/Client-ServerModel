@@ -19,9 +19,8 @@ def broadcast(message):
     # implement the filtering of the messages here
     for i in banned_words:
         if i in message.decode('ascii'):
-
             message = message.replace(i.encode('ascii'), b'*' * len(i))
-            
+
     # implement the brand analytics and tracking here
 
     for client in clients:
@@ -76,6 +75,10 @@ def receive():
         broadcast(f"{nickname} joined the chat".encode('ascii'))
         # letting know the specific client that it has connected to the server
         client.send("Connected to the server".encode('ascii'))
+
+        #Implementation of a log that keeps record of all the usernames so far.
+        with open("usernames.txt", "a") as f:
+            f.write(f"{nickname}\n")
 
         # define and run a thread
         # because we want to be able to handle multi clients same time
