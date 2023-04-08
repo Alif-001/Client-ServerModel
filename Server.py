@@ -12,11 +12,16 @@ server.listen()
 
 clients = []
 nicknames = []
-
+banned_words = ["bad", "idiot", "black"]
 
 # braodcasting messages from the server to all the clients
 def broadcast(message):
     # implement the filtering of the messages here
+    for i in banned_words:
+        if i in message.decode('ascii'):
+
+            message = message.replace(i.encode('ascii'), b'*' * len(i))
+            
     # implement the brand analytics and tracking here
 
     for client in clients:
