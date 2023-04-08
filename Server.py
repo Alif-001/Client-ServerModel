@@ -15,6 +15,8 @@ nicknames = []
 banned_words = ["bad", "idiot", "black"]
 
 # braodcasting messages from the server to all the clients
+
+
 def broadcast(message):
     # implement the filtering of the messages here
     for i in banned_words:
@@ -22,6 +24,9 @@ def broadcast(message):
             message = message.replace(i.encode('ascii'), b'*' * len(i))
 
     # implement the brand analytics and tracking here
+    # tracking
+    with open('chatTracking.txt', 'a')as f:
+        f.write(f'{(message.decode("ascii"))}\n')
 
     for client in clients:
         client.send(message)
@@ -76,7 +81,7 @@ def receive():
         # letting know the specific client that it has connected to the server
         client.send("Connected to the server".encode('ascii'))
 
-        #Implementation of a log that keeps record of all the usernames so far.
+        # Implementation of a log that keeps record of all the usernames so far.
         with open("usernames.txt", "a") as f:
             f.write(f"{nickname}\n")
 
